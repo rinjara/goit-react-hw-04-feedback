@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
 import { Section } from './Section/Section';
 import { Statistics } from './Statistics/Statistics';
-// import PropTypes from 'prop-types';
+import { Notification } from './Notification/Notification';
 
 export class App extends Component {
   state = {
@@ -11,11 +11,9 @@ export class App extends Component {
     bad: 0,
   };
 
-  handleStatsIncrement = event => {
+  handleStatsIncrement = option => {
     this.setState(prevState => {
-      const value = event.currentTarget.value;
-      console.log(value);
-      return {};
+      return { [option]: prevState[option] + 1 };
     });
   };
 
@@ -26,7 +24,8 @@ export class App extends Component {
 
   countPositiveFeedbackPercentage = () => {
     const { good, neutral, bad } = this.state;
-    return (good / (good + neutral + bad)) * 100;
+    const percentage = (good / (good + neutral + bad)) * 100;
+    return !percentage ? 0 : percentage;
   };
 
   render() {
@@ -35,10 +34,11 @@ export class App extends Component {
       countTotalFeedback,
       countPositiveFeedbackPercentage,
       handleStatsIncrement,
+      state,
     } = this;
     const total = countTotalFeedback();
     const positivePercentage = countPositiveFeedbackPercentage();
-    const options = Object.keys(this.state);
+    const options = Object.keys(state);
 
     return (
       <>
@@ -50,13 +50,17 @@ export class App extends Component {
         </Section>
 
         <Section title="Statistics">
-          <Statistics
-            good={good}
-            neutral={neutral}
-            bad={bad}
-            total={total}
-            positivePercentage={positivePercentage}
-          />
+          {total > 0 ? (
+            <Statistics
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              total={total}
+              positivePercentage={positivePercentage}
+            />
+          ) : (
+            <Notification message="There is no feedback" />
+          )}
         </Section>
       </>
     );
