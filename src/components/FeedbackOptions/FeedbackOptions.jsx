@@ -4,10 +4,10 @@ import { Wrapper, OptionButton } from './FeedbackOptions.styled';
 export const FeedbackOptions = ({ options, onLeaveFeedback }) => {
   return (
     <Wrapper>
-      {options.map(option => (
+      {options.map((option, idx) => (
         <OptionButton
           type="button"
-          key={option}
+          key={idx}
           onClick={() => onLeaveFeedback(option)}
         >
           {option}
