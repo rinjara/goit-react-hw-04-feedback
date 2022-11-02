@@ -30,7 +30,7 @@ export const App = () => {
 
   const options = ['good', 'neutral', 'bad'];
   const total = good + neutral + bad;
-  const percentage = (good / (good + neutral + bad)) * 100;
+  const percentage = (good / total) * 100;
 
   return (
     <>
